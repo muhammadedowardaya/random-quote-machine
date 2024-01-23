@@ -10,6 +10,7 @@ const quotesSlice = createSlice({
 		error: null,
 		quoteNumber: 0,
 		quoteOffline: quotes[0],
+		language: 'ID',
 	},
 	reducers: {
 		getRandomQuoteOffline: (state) => {
@@ -22,6 +23,13 @@ const quotesSlice = createSlice({
 				if (quotes[state.quoteNumber] !== undefined) {
 					state.quoteOffline = quotes[state.quoteNumber];
 				}
+			}
+		},
+		changeLanguage: (state) => {
+			if (state.language === 'ID') {
+				state.language = 'EN';
+			} else {
+				state.language = 'ID';
 			}
 		},
 	},
@@ -41,6 +49,6 @@ const quotesSlice = createSlice({
 	},
 });
 
-export const { getRandomQuoteOffline } = quotesSlice.actions;
+export const { getRandomQuoteOffline, changeLanguage } = quotesSlice.actions;
 
 export default quotesSlice.reducer;

@@ -6,7 +6,10 @@ import { updateRootTheme } from './utils/themeManajer';
 import { incrementColor } from './features/theme/reducer';
 
 import { FaQuoteLeft } from 'react-icons/fa6';
-import { getRandomQuoteOffline } from './features/quotes/reducer';
+import {
+	changeLanguage,
+	getRandomQuoteOffline,
+} from './features/quotes/reducer';
 
 function App() {
 	const [isOnline, setIsOnline] = React.useState(navigator.onLine);
@@ -16,13 +19,13 @@ function App() {
 	const quoteOffline = useSelector((state) => state.quote.quoteOffline);
 	const status = useSelector((state) => state.quote.status);
 	const quoteNumber = useSelector((state) => state.quote.quoteNumber);
+	const language = useSelector((state) => state.quote.language);
 
 	const dispatch = useDispatch();
 	const textRef = React.useRef(null);
 	const authorRef = React.useRef(null);
 
 	React.useEffect(() => {
-		
 		const handleOnline = () => {
 			setIsOnline(true);
 		};
@@ -39,12 +42,14 @@ function App() {
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
-    React.useEffect(()=>{
-        if(isOnline){
-            dispatch(getRandomQuote());
-        }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    },[isOnline]);
+	React.useEffect(() => {
+		if (language === 'EN') {
+			dispatch(getRandomQuote());
+		} else if (language === 'ID') {
+			dispatch(getRandomQuoteOffline());
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [isOnline]);
 
 	const updateClasses = () => {
 		if (textRef.current && authorRef.current) {
@@ -71,7 +76,7 @@ function App() {
 	}, [status, quoteNumber]);
 
 	const newQuoteHandler = () => {
-		if (isOnline) {
+		if (isOnline && language === 'EN') {
 			dispatch(getRandomQuote());
 		} else {
 			dispatch(getRandomQuoteOffline());
@@ -79,16 +84,42 @@ function App() {
 		dispatch(incrementColor());
 	};
 
+	const changeLanguageHandler = () => {
+		if (isOnline) {
+			dispatch(changeLanguage());
+		} else {
+			alert('Please check your internet :)');
+		}
+	};
+
+	let quoteOnlineResult = '';
+	let quoteOfflineResult = '';
+
+	if (isOnline === true && quoteOnline !== null && language === 'EN') {
+		quoteOnlineResult = quoteOnline;
+	}
+
+	if (
+		(isOnline === false && quoteOffline !== null && language === 'ID') ||
+		language === 'ID'
+	) {
+		quoteOfflineResult = quoteOffline;
+	}
+
 	return (
 		<div id="quote-box">
 			<div id="text" ref={textRef}>
 				<FaQuoteLeft className="quote-icon" />
-				{isOnline === true && quoteOnline !== null ? quoteOnline.quote : ''}
-				{isOnline === false && quoteOffline.quote}
+				{quoteOnlineResult.quote}
+				{quoteOfflineResult.quote}
 			</div>
 			<div id="author" ref={authorRef}>
-				{isOnline === true && quoteOnline !== null ? `- ${quoteOnline.author}` : ''}
-				{isOnline === false && `- ${quoteOffline.author}`}
+				{isOnline === true && quoteOnline !== null && language === 'EN'
+					? `- ${quoteOnline.author}`
+					: ''}
+				{(isOnline === false && language === 'ID') || language === 'ID'
+					? `- ${quoteOffline.author}`
+					: ''}
 			</div>
 			<div className="quote-box__action">
 				<a
@@ -108,13 +139,15 @@ function App() {
 						<path d="M12.6.75h2.454l-5.36 6.142L16 15.25h-4.937l-3.867-5.07-4.425 5.07H.316l5.733-6.57L0 .75h5.063l3.495 4.633L12.601.75Zm-.86 13.028h1.36L4.323 2.145H2.865z" />
 					</svg>
 				</a>
+				<div id="language" onClick={changeLanguageHandler}>
+					Version : {language === 'ID' ? 'EN' : 'ID'}
+				</div>
 				<button
 					id="new-quote"
 					onClick={newQuoteHandler}
 					className="btn"
 					disabled={
-						(status === 'succeeded' && isOnline === true) ||
-						(isOnline === false)
+						(status === 'succeeded' && isOnline === true) || isOnline === false
 							? false
 							: true
 					}

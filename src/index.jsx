@@ -4,10 +4,12 @@ import App from './App.jsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Provider } from 'react-redux';
 import { store } from './store/store.js';
+import Header from './components/Header.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
 	<React.StrictMode>
 		<Provider store={store}>
+            <Header />
 			<App />
 		</Provider>
 	</React.StrictMode>

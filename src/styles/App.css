@@ -55,10 +55,12 @@ html {
 	min-width: 100vw;
 	min-height: 100vh;
 	display: flex;
+    flex-direction: column;
 	justify-content: center;
 	align-items: center;
 	transition: background-color 1s ease;
 	font-family: 'Raleway', sans-serif;
+    padding:1rem;
 }
 
 .fadein {
@@ -89,6 +91,22 @@ html {
 	}
 }
 
+header {
+    text-align: center;
+    color:#fff;
+    padding:1rem;
+}
+header > h1 {
+    font-weight: 900;
+    font-family: 'Lora', serif;
+    font-size: 4rem;
+}
+
+header > p {
+    font-size:2rem;
+    font-family: 'Pacifico', cursive;
+}
+
 #quote-box {
 	width: 100%;
 	max-width: 600px;
@@ -96,7 +114,6 @@ html {
 	border-radius: 0.5rem;
 	padding: 2rem;
 	margin: 1rem;
-    align-self: flex-start;
 }
 
 #quote-box #text {
@@ -140,6 +157,16 @@ html {
 	transform: scale(1.2);
 }
 
+#quote-box #language {
+    color: var(--color);
+	background-color: #fff;
+	padding: 1.1rem;
+	border-radius: 0.5rem;
+    border:2px solid var(--color);
+    cursor: pointer;
+    margin:0 auto 0 8px;
+}
+
 #quote-box #new-quote {
 	color: #fff;
 	font-size: 1.5rem;
@@ -148,8 +175,11 @@ html {
 }
 
 @media only screen and (min-width: 480px) {
+    #root {
+        padding:2rem;
+    }
 	#quote-box {
-		padding: 4rem;
+		padding: 4rem 4rem 2rem;
 		margin: 2rem;
 	}
 
