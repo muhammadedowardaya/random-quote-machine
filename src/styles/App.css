@@ -96,6 +96,7 @@ html {
 	border-radius: 0.5rem;
 	padding: 2rem;
 	margin: 1rem;
+    align-self: flex-start;
 }
 
 #quote-box #text {
