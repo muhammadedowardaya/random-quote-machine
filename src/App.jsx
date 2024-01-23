@@ -26,6 +26,7 @@ function App() {
 	const authorRef = React.useRef(null);
 
 	React.useEffect(() => {
+		console.info(theme.color);
 		const handleOnline = () => {
 			setIsOnline(true);
 		};
@@ -65,10 +66,12 @@ function App() {
 
 	React.useEffect(() => {
 		updateClasses();
-		if (isOnline) {
+		if (isOnline && language === 'EN') {
 			if (status === 'succeeded') {
 				updateRootTheme(theme.color);
 			}
+		} else if (isOnline && language === 'ID') {
+			updateRootTheme(theme.color);
 		} else {
 			updateRootTheme(theme.color);
 		}
@@ -86,6 +89,7 @@ function App() {
 
 	const changeLanguageHandler = () => {
 		if (isOnline) {
+			dispatch(getRandomQuote());
 			dispatch(changeLanguage());
 		} else {
 			alert('Please check your internet :)');
@@ -147,7 +151,11 @@ function App() {
 					onClick={newQuoteHandler}
 					className="btn"
 					disabled={
-						(status === 'succeeded' && isOnline === true) || isOnline === false
+						(status === 'succeeded' &&
+							isOnline === true &&
+							language === 'EN') ||
+						(isOnline === false && language === 'ID') ||
+						language === 'ID'
 							? false
 							: true
 					}
